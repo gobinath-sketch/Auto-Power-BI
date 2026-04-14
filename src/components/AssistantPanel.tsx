@@ -17,7 +17,7 @@ interface AssistantPanelProps {
 
 export const AssistantPanel = ({ files, onClose }: AssistantPanelProps) => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hello! I can help you understand your data, explain patterns, and provide insights. Try asking me something like \"Why is January revenue high?\" or type @ to reference specific files." },
+    { role: "assistant", content: "Hello! I can help you " },
   ]);
   const [input, setInput] = useState("");
   const [showFiles, setShowFiles] = useState(false);
