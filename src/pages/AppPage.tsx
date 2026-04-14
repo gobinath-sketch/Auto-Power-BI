@@ -42,7 +42,7 @@ const AppPage = () => {
     });
 
     // Load dark mode preference
-    const saved = localStorage.getItem("datalens-dark-mode");
+    const saved = localStorage.getItem("PowerAI-dark-mode");
     if (saved === "true") {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
@@ -54,7 +54,7 @@ const AppPage = () => {
   const toggleDarkMode = () => {
     const next = !darkMode;
     setDarkMode(next);
-    localStorage.setItem("datalens-dark-mode", String(next));
+    localStorage.setItem("Power AI-dark-mode", String(next));
     if (next) {
       document.documentElement.classList.add("dark");
     } else {

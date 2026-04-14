@@ -16,7 +16,7 @@ serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("API key not configured");
 
-    const systemPrompt = `You are an expert data analyst assistant for DataLens, a data analytics platform. 
+    const systemPrompt = `You are an expert data analyst assistant for Power AI, a data analytics platform. 
 You analyze data and provide clear, structured, professional insights.
 
 When answering:
@@ -36,7 +36,7 @@ Data context provided by the user will include column names, sample data, and st
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://lovable.dev",
-        "X-Title": "DataLens Assistant",
+        "X-Title": "Power AI Assistant",
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",

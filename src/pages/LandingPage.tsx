@@ -8,7 +8,7 @@ const LandingPage = () => {
       {/* Nav */}
       <nav className="fixed top-0 w-full bg-background/80 backdrop-blur-sm border-b z-50">
         <div className="max-w-6xl mx-auto flex items-center justify-center h-14 px-6 gap-8">
-          <Link to="/" className="text-lg font-semibold tracking-tight mr-auto">DataLens</Link>
+          <Link to="/" className="text-lg font-semibold tracking-tight mr-auto">Power AI</Link>
           <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Sign In</Link>
           <Button asChild size="sm">
             <Link to="/signup">Get Started</Link>
@@ -121,7 +121,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="border-t py-8 px-6">
         <div className="max-w-5xl mx-auto flex items-center justify-between text-sm text-muted-foreground">
-          <span>© 2026 DataLens</span>
+          <span>© 2026 Power AI</span>
           <div className="flex gap-6">
             <span>Privacy</span>
             <span>Terms</span>

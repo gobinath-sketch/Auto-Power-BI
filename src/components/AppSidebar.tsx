@@ -18,7 +18,7 @@ export const AppSidebar = ({ currentView, onViewChange, onNewDashboard }: AppSid
   return (
     <div className="w-56 border-r bg-surface flex flex-col shrink-0">
       <div className="h-14 flex items-center px-4 border-b">
-        <span className="text-sm font-semibold tracking-tight">DataLens</span>
+        <span className="text-sm font-semibold tracking-tight">PowerAI</span>
       </div>
       <div className="p-3">
         <Button size="sm" className="w-full justify-start gap-2" onClick={onNewDashboard}>

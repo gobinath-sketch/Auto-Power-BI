@@ -35,7 +35,7 @@ const SignupPage = () => {
       {/* Left: Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
-          <Link to="/" className="text-lg font-semibold tracking-tight">DataLens</Link>
+          <Link to="/" className="text-lg font-semibold tracking-tight">Power AI</Link>
           <h1 className="text-2xl font-semibold mt-8 mb-1">Create account</h1>
           <p className="text-sm text-muted-foreground mb-6">Start analyzing your data in minutes</p>
 
