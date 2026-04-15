@@ -141,11 +141,11 @@ export const DynamicChart = ({ config, data }: DynamicChartProps) => {
     }
   };
 
-  const colSpanClass = config.width === "full" ? "col-span-2" : "col-span-1";
+  const colSpanClass = config.width === "full" ? "min-[1025px]:col-span-2" : "min-[1025px]:col-span-1";
   const rowSpanClass = config.height === "medium" ? "row-span-2" : "row-span-1";
 
   return (
-    <div className={`bg-background border rounded-xl shadow-sm p-4 flex flex-col ${colSpanClass} ${rowSpanClass}`}>
+    <div className={`bg-background border rounded-xl shadow-sm p-4 flex flex-col w-full min-[481px]:min-h-[280px] max-[480px]:min-h-[240px] col-span-1 ${colSpanClass} ${rowSpanClass}`}>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="font-semibold text-sm">{config.title}</h3>

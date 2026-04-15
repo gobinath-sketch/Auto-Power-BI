@@ -37,6 +37,7 @@ const AppPage = () => {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [sidebarView, setSidebarView] = useState<string>("dashboards");
   const [darkMode, setDarkMode] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Track saved files (uploads) and downloads (exports)
   const [savedFiles, setSavedFiles] = useState<SavedFileRecord[]>([]);
@@ -83,6 +84,7 @@ const AppPage = () => {
     setHasDashboard(true);
     setShowUpload(false);
     setSidebarView("dashboards");
+    setMobileMenuOpen(false);
 
     // Record each uploaded file in Saved Files
     const newRecords: SavedFileRecord[] = uploadedFiles.map((f) => ({
@@ -136,8 +138,10 @@ const AppPage = () => {
     <div className="h-screen flex overflow-hidden">
       <AppSidebar
         currentView={sidebarView}
-        onViewChange={setSidebarView}
-        onNewDashboard={() => setShowUpload(true)}
+        onViewChange={(v) => { setSidebarView(v); setMobileMenuOpen(false); }}
+        onNewDashboard={() => { setShowUpload(true); setMobileMenuOpen(false); }}
+        mobileMenuOpen={mobileMenuOpen}
+        onCloseMobileMenu={() => setMobileMenuOpen(false)}
       />
       <div className="flex-1 flex flex-col min-w-0">
         <AppTopBar
@@ -145,6 +149,7 @@ const AppPage = () => {
           onToggleAssistant={() => setAssistantOpen(!assistantOpen)}
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
+          onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
         />
         <div className="flex-1 flex overflow-hidden">
           <main className="flex-1 overflow-auto">

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Send, Mic, Loader2 } from "lucide-react";
+import { X, Send, Mic, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,10 +102,13 @@ export const AssistantPanel = ({ files, onClose }: AssistantPanelProps) => {
   };
 
   return (
-    <div className="w-80 border-l flex flex-col bg-background shrink-0">
-      <div className="h-12 flex items-center justify-between px-3 border-b shrink-0">
-        <span className="text-sm font-medium">Assistant</span>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-7 w-7">
+    <div className="w-80 border-l flex flex-col bg-background shrink-0 max-[480px]:w-full max-[480px]:fixed max-[480px]:inset-0 max-[480px]:z-50">
+      <div className="h-12 flex items-center px-3 border-b shrink-0">
+        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 mr-2 hidden max-[480px]:flex">
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <span className="text-sm font-medium flex-1">Assistant</span>
+        <Button variant="ghost" size="icon" onClick={onClose} className="h-7 w-7 text-muted-foreground hover:text-foreground flex max-[480px]:hidden">
           <X className="h-4 w-4" />
         </Button>
       </div>

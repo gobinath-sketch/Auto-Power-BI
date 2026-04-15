@@ -81,49 +81,51 @@ export const DashboardView = ({ files, onExport }: DashboardViewProps) => {
   }, [filtersConfig, columns, rawData]);
 
   return (
-    <div ref={dashboardRef} className="h-full flex flex-col p-4 gap-4 bg-background/50">
+    <div ref={dashboardRef} className="h-full flex flex-col p-4 gap-4 bg-background/50 overflow-auto">
       {/* Filters + Export */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-        <div className="flex flex-col gap-2 overflow-x-auto w-full pb-1">
+      <div className="flex flex-col min-[481px]:flex-row min-[481px]:items-start justify-between gap-3 shrink-0">
+        <div className="flex flex-col gap-2 w-full min-w-0">
           {filtersConfig.map((f: any) => (
-            <div key={f.column} className="flex flex-wrap items-center gap-1.5">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mr-1">
+            <div key={f.column} className="flex items-center gap-1.5 w-full">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground shrink-0 w-20">
                 {f.label}:
               </span>
-              <button
-                onClick={() => setFilterValue(f.column, "all")}
-                className={`px-3 py-1 text-xs rounded-full transition-colors whitespace-nowrap border ${
-                  !activeFilters[f.column] || activeFilters[f.column] === "all"
-                    ? "bg-foreground text-background border-foreground shadow-sm"
-                    : "bg-background text-muted-foreground hover:border-foreground/50 border-border"
-                }`}
-              >
-                All
-              </button>
-              {(uniqueFilterValues[f.column] || []).map((val) => (
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-1 pb-1">
                 <button
-                  key={val}
-                  onClick={() => setFilterValue(f.column, val)}
-                  className={`px-3 py-1 text-xs rounded-full transition-colors whitespace-nowrap border ${
-                    activeFilters[f.column] === val
+                  onClick={() => setFilterValue(f.column, "all")}
+                  className={`px-3 py-1 text-xs max-[480px]:text-[13px] rounded-full transition-colors whitespace-nowrap border shrink-0 ${
+                    !activeFilters[f.column] || activeFilters[f.column] === "all"
                       ? "bg-foreground text-background border-foreground shadow-sm"
                       : "bg-background text-muted-foreground hover:border-foreground/50 border-border"
                   }`}
                 >
-                  {val}
+                  All
                 </button>
-              ))}
+                {(uniqueFilterValues[f.column] || []).map((val) => (
+                  <button
+                    key={val}
+                    onClick={() => setFilterValue(f.column, val)}
+                    className={`px-3 py-1 text-xs max-[480px]:text-[13px] rounded-full transition-colors whitespace-nowrap border shrink-0 ${
+                      activeFilters[f.column] === val
+                        ? "bg-foreground text-background border-foreground shadow-sm"
+                        : "bg-background text-muted-foreground hover:border-foreground/50 border-border"
+                    }`}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
         </div>
-        <Button variant="outline" size="sm" onClick={handleExportCSV} className="shrink-0 self-end">
+        <Button variant="outline" size="sm" onClick={handleExportCSV} className="shrink-0 max-[480px]:self-start min-[481px]:self-end">
           <Download className="h-3.5 w-3.5 mr-1" /> Export Data
         </Button>
       </div>
 
       {/* KPIs */}
       {kpis.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 shrink-0">
+        <div className="grid grid-cols-1 min-[481px]:grid-cols-2 lg:grid-cols-4 gap-3 shrink-0">
           {kpis.map((kpi: any, idx: number) => {
             const val = computeKpi(rawData, columns, kpi, activeFilters);
             let displayVal = val.toLocaleString();
@@ -136,7 +138,7 @@ export const DashboardView = ({ files, onExport }: DashboardViewProps) => {
 
       {/* Charts grid */}
       {charts.length > 0 && (
-        <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 max-lg:grid-rows-none xl:grid-rows-2 gap-3 pb-2">
+        <div className="flex-1 min-h-0 grid grid-cols-1 min-[1025px]:grid-cols-2 gap-3 pb-2">
           {charts.map((chart: any, i: number) => {
             const chartData = aggregateData(rawData, columns, chart, activeFilters);
             return (
