@@ -65,7 +65,7 @@ const LoginPage = () => {
 
       {/* Right: Form */}
       <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm bg-card p-8 rounded-2xl shadow-sm border">
           <Link to="/" className="text-lg font-semibold tracking-tight">Power AI</Link>
           <h1 className="text-2xl font-semibold mt-8 mb-1">Sign in</h1>
           <p className="text-sm text-muted-foreground mb-6">Enter your credentials to continue</p>
