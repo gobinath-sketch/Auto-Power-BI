@@ -8,6 +8,9 @@ import { EmptyState } from "@/components/EmptyState";
 import { FileUploadModal } from "@/components/FileUploadModal";
 import { DashboardView } from "@/components/DashboardView";
 import { AssistantPanel } from "@/components/AssistantPanel";
+import { SavedFilesView } from "@/components/SavedFilesView";
+import { DownloadsView } from "@/components/DownloadsView";
+import type { DownloadRecord } from "@/components/DownloadsView";
 
 export interface UploadedFile {
   name: string;
@@ -19,6 +22,12 @@ export interface UploadedFile {
   dashboard_config?: any;
 }
 
+export interface SavedFileRecord {
+  name: string;
+  size: number;
+  uploadedAt: string;
+}
+
 const AppPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,6 +37,11 @@ const AppPage = () => {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [sidebarView, setSidebarView] = useState<string>("dashboards");
   const [darkMode, setDarkMode] = useState(false);
+
+  // Track saved files (uploads) and downloads (exports)
+  const [savedFiles, setSavedFiles] = useState<SavedFileRecord[]>([]);
+  const [downloads, setDownloads] = useState<DownloadRecord[]>([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +70,7 @@ const AppPage = () => {
   const toggleDarkMode = () => {
     const next = !darkMode;
     setDarkMode(next);
-    localStorage.setItem("Power AI-dark-mode", String(next));
+    localStorage.setItem("PowerAI-dark-mode", String(next));
     if (next) {
       document.documentElement.classList.add("dark");
     } else {
@@ -68,24 +82,73 @@ const AppPage = () => {
     setFiles(uploadedFiles);
     setHasDashboard(true);
     setShowUpload(false);
+    setSidebarView("dashboards");
+
+    // Record each uploaded file in Saved Files
+    const newRecords: SavedFileRecord[] = uploadedFiles.map((f) => ({
+      name: f.name,
+      size: f.size,
+      uploadedAt: new Date().toISOString(),
+    }));
+    setSavedFiles((prev) => [...newRecords, ...prev]);
+  };
+
+  const handleExport = (record: DownloadRecord) => {
+    setDownloads((prev) => [record, ...prev]);
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center"><p className="text-muted-foreground">Loading...</p></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
   }
+
+  const renderMainContent = () => {
+    switch (sidebarView) {
+      case "files":
+        return (
+          <SavedFilesView
+            savedFiles={savedFiles}
+            onOpenDashboard={() => setSidebarView("dashboards")}
+          />
+        );
+      case "downloads":
+        return <DownloadsView downloads={downloads} />;
+      case "settings":
+        return (
+          <div className="h-full flex items-center justify-center text-muted-foreground">
+            <p>Settings coming soon.</p>
+          </div>
+        );
+      case "dashboards":
+      default:
+        return !hasDashboard ? (
+          <EmptyState onCreateNew={() => setShowUpload(true)} />
+        ) : (
+          <DashboardView files={files} onExport={handleExport} />
+        );
+    }
+  };
 
   return (
     <div className="h-screen flex overflow-hidden">
-      <AppSidebar currentView={sidebarView} onViewChange={setSidebarView} onNewDashboard={() => setShowUpload(true)} />
+      <AppSidebar
+        currentView={sidebarView}
+        onViewChange={setSidebarView}
+        onNewDashboard={() => setShowUpload(true)}
+      />
       <div className="flex-1 flex flex-col min-w-0">
-        <AppTopBar user={user} onToggleAssistant={() => setAssistantOpen(!assistantOpen)} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />
+        <AppTopBar
+          user={user}
+          onToggleAssistant={() => setAssistantOpen(!assistantOpen)}
+          darkMode={darkMode}
+          onToggleDarkMode={toggleDarkMode}
+        />
         <div className="flex-1 flex overflow-hidden">
           <main className="flex-1 overflow-auto">
-            {!hasDashboard ? (
-              <EmptyState onCreateNew={() => setShowUpload(true)} />
-            ) : (
-              <DashboardView files={files} />
-            )}
+            {renderMainContent()}
           </main>
           {assistantOpen && (
             <AssistantPanel files={files} onClose={() => setAssistantOpen(false)} />
@@ -93,7 +156,10 @@ const AppPage = () => {
         </div>
       </div>
       {showUpload && (
-        <FileUploadModal onClose={() => setShowUpload(false)} onFilesUploaded={handleFilesUploaded} />
+        <FileUploadModal
+          onClose={() => setShowUpload(false)}
+          onFilesUploaded={handleFilesUploaded}
+        />
       )}
     </div>
   );

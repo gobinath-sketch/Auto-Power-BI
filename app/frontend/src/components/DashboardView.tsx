@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { aggregateData, computeKpi } from "@/lib/aggregation";
+import type { DownloadRecord } from "@/components/DownloadsView";
 
 interface DashboardViewProps {
   files: UploadedFile[];
+  onExport: (record: DownloadRecord) => void;
 }
 
-export const DashboardView = ({ files }: DashboardViewProps) => {
+export const DashboardView = ({ files, onExport }: DashboardViewProps) => {
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const dashboardRef = useRef<HTMLDivElement>(null);
 
@@ -28,10 +30,21 @@ export const DashboardView = ({ files }: DashboardViewProps) => {
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+    const fileName = `exported_data_${Date.now()}.csv`;
     a.href = url;
-    a.download = `exported_data.csv`;
+    a.download = fileName;
     a.click();
     URL.revokeObjectURL(url);
+
+    // Report to parent so Downloads view can track it
+    const sizeBytes = new Blob([csv]).size;
+    onExport({
+      name: fileName,
+      size: sizeBytes,
+      exportedAt: new Date().toISOString(),
+      csvContent: csv,
+    });
+
     toast.success("Data exported as CSV");
   };
 
