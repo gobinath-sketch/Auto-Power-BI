@@ -15,6 +15,8 @@ export interface UploadedFile {
   type: string;
   data: any[][] | null;
   columns: string[];
+  schema_analysis?: any;
+  dashboard_config?: any;
 }
 
 const AppPage = () => {

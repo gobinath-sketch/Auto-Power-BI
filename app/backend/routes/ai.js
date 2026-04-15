@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAiInsight } = require('../services/openaiService');
+const { getAiInsight, analyzeSchema, generateDashboardConfig } = require('../services/openaiService');
 const { logAiQuery } = require('../services/supabaseService');
 
 router.post('/chat', async (req, res) => {
@@ -24,6 +24,34 @@ router.post('/chat', async (req, res) => {
   } catch (error) {
     console.error('API Error /api/ai/chat:', error.message || error);
     res.status(500).json({ answer: 'I couldn\'t process that request at this time. Please try again.' });
+  }
+});
+
+router.post('/schema-analyze', async (req, res) => {
+  try {
+    const schemaPayload = req.body;
+    if (!schemaPayload || !schemaPayload.columns) {
+      return res.status(400).json({ error: 'Valid schema payload is required' });
+    }
+    const result = await analyzeSchema(schemaPayload);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('API Error /api/ai/schema-analyze:', error.message || error);
+    res.status(500).json({ error: 'Failed to analyze schema' });
+  }
+});
+
+router.post('/dashboard-config', async (req, res) => {
+  try {
+    const schemaAnalysis = req.body;
+    if (!schemaAnalysis || !schemaAnalysis.kpi_columns) {
+      return res.status(400).json({ error: 'Valid schema analysis is required' });
+    }
+    const result = await generateDashboardConfig(schemaAnalysis);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('API Error /api/ai/dashboard-config:', error.message || error);
+    res.status(500).json({ error: 'Failed to generate dashboard config' });
   }
 });
 
